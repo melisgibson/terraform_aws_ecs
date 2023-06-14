@@ -53,65 +53,20 @@ module "ec2" {
   subnet_ids              = module.networking.private_subnet_ids
 }
 
-# module "ecs" {
-#   source         = "../../Modules/ecs"
-#   environment    = "prod"
-#   cluster_name   = "prod-us-east-1-ecs"
-# }
+module "ecs" {
+  source         = "../../Modules/ecs"
+  environment    = "prod"
+  cluster_name   = "prod-us-east-1-ecs"
+}
 
-# module "alb-deckviewer" {
-#   source              = "../../Modules/elb"
-#   environment         = "prod"
-#   alb_name            = "prod-use1-alb"
-#   target_group_arn    = module.ecs-service.target_group_arn
-#   public_subnets      = module.networking.public_subnet_ids
-#   alb_sg              = module.networking.lb_sg_id
-#   listener_port       = 443
-# #   ssl_certificate_arn = ""
-#   access_log_bucket   = "us-east-1-elb-access-logs"
-#   access_log_path     = "prod-use1-alb"
-# }
-
-
-# module "ecs-service" {
-#   source                            = "../../Modules/ecs-service"
-#   ecs_cluster_id                    = module.ecs.ecs_cluster_id
-#   task_family                       = "test-prod"
-#   container_definitions             = file("${path.module}/ecs-cd.json")
-#   task_definition_volumes           = []
-#   service_name                      = "test-prod"
-#   desired_count                     = 2
-#   deployment_max                    = 200
-#   deployment_min                    = 100
-#   container_name                    = "test-prod"
-#   container_port                    = 4000
-#   enable_deployment_circuit_breaker = false
-#   enable_rollback                   = false
-#   placement_constraint_type         = "memberOf"
-#   placement_constraint_expression   = "attribute:ecs.availability-zone in [us-east-1a, us-east-1b]"
-#   execution_role_arn                = "arn:aws:iam::027427181034:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS"
-#   task_role_arn                     = "arn:aws:iam::027427181034:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS"
-#   network_mode                      = "bridge"
-#   enable_ecs_managed_tags           = true
-#   propagate_tags                    = "SERVICE"
-#   enable_execute_command            = false
-#   health_check_grace_period         = 60
-#   iam_role                          = "AWSServiceRoleForEC"
-#   environment                       = "prod"
-#   vpc_id                            = module.networking.vpc_id
-#   tg_name                           = "prod-use1-tg"
-#   tg_port                           = 443
-#   target_type                       = "instance"
-#   healthy_threshold                 = 2
-#   unhealthy_threshold               = 2
-#   health_check_interval             = 30
-#   health_check_path                 = "/api/v1/system"
-#   health_check_timeout              = 5
-#   create_listener_host_header_rule  = false
-#   create_listener_path_pattern_rule = false
-#   alb_listener_arn                  = ""
-#   priority_host_header              = 0
-#   priority_path_pattern             = 0
-#   host_header_value                 = []
-#   path_pattern_value                = ""
-# }
+module "alb-deckviewer" {
+  source              = "../../Modules/elb"
+  environment         = "prod"
+  alb_name            = "prod-use1-alb"
+  target_group_arn    = module.ecs-service.target_group_arn
+  public_subnets      = module.networking.public_subnet_ids
+  alb_sg              = module.networking.lb_sg_id
+  listener_port       = 443
+  access_log_bucket   = "us-east-1-elb-access-logs"
+  access_log_path     = "prod-use1-alb"
+}
