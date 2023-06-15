@@ -1,7 +1,7 @@
 # ---Global/main.tf---
 
 provider "aws" {
-  region = "us-east-1"
+  region = "us-east-2"
 }
 
 terraform {
@@ -15,9 +15,9 @@ terraform {
 
 module "s3" {
   source = "../../Modules/s3"
-  bucket_name = "mgibson-us-east-1-elb-access-logs"
+  bucket_name = "mgibson-us-east-2-elb-access-logs"
   environment = "prod"
   enable_encryption = true
   enable_versioning = false
-  account_id = "*"
+  account_id = "027427181034"
 }
