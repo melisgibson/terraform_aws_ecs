@@ -167,20 +167,6 @@ resource "aws_security_group" "sg" {
     protocol     = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  ingress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "all"
-    cidr_blocks = [var.peer_vpc_cidr1]
-  }
-
-    ingress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "all"
-    cidr_blocks = [var.peer_vpc_cidr2]
-  }
 }
 
 # Create a security group for the load balancer

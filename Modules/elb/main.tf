@@ -34,7 +34,7 @@ resource "aws_lb_listener" "https_listener" {
 
   default_action {
     type             = "forward"
-    target_group_arn = var.target_group_arn
+    target_group_arn = aws_lb_target_group.tg.arn
   }
 
   tags = {
@@ -57,4 +57,34 @@ resource "aws_lb_listener" "http_listener" {
       status_code = "HTTP_301"
     }
 }
+}
+
+# Create a target group
+resource "aws_lb_target_group" "tg" {
+  name             = var.tg_name
+  port             = var.tg_port
+  protocol         = "HTTP"
+  target_type      = var.target_type
+  vpc_id           = var.vpc_id
+  load_balancing_algorithm_type = "round_robin"
+  health_check {
+    enabled = true
+    healthy_threshold   = var.healthy_threshold
+    unhealthy_threshold = var.unhealthy_threshold
+    interval            = var.health_check_interval
+    matcher = "200"
+    path                = var.health_check_path
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = var.health_check_timeout
+  }
+  stickiness {
+    cookie_duration = 86400
+    enabled         = false
+    type            = "lb_cookie"
+  }
+  tags = {
+    Environment = var.environment
+    Name        = var.tg_name
+  }
 }
