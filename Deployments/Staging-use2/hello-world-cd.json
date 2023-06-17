@@ -1,0 +1,24 @@
+[
+    {
+      "name": "hello-world-container",
+      "image": "*.dkr.ecr.us-east-2.amazonaws.com/hello-world:latest",
+      "cpu": 0,
+      "memoryReservation": 2048,
+      "portMappings": [
+        {
+          "containerPort": 4000,
+          "hostPort": 0,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "ENVIRONMENT",
+          "value": "staging"
+        }
+      ],
+      "mountPoints": [],
+      "volumesFrom": []
+    }
+  ]
