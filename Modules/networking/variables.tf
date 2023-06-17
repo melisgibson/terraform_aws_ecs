@@ -53,11 +53,3 @@ variable "private_rt_name" {
 variable "sg_name" {
     description = "Security group name"
 }
-
-variable "lb_sg_name" {
-  description = "LB security group name"
-}
-
-variable "nacl_name" {
-    description = "nacl name"
-}

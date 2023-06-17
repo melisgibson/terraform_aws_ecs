@@ -158,7 +158,7 @@ resource "aws_security_group" "sg" {
     from_port       = 0
     to_port         = 65535
     protocol        = "tcp"
-    cidr_blocks     = [var.vpc_cidr]
+    cidr_blocks     = ["0.0.0.0/0"]
   }
   
   ingress {
@@ -166,107 +166,5 @@ resource "aws_security_group" "sg" {
     to_port      = 22
     protocol     = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-# Create a security group for the load balancer
-resource "aws_security_group" "alb_sg" {
-  name  = var.lb_sg_name
-  vpc_id      = aws_vpc.vpc.id
-  description = "Security group for the application load balancer"
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port       = 0
-    to_port         = 65535
-    protocol        = "tcp"
-    cidr_blocks = [var.vpc_cidr]
-  }
-
-  tags = {
-    Name = var.lb_sg_name
-    Environment = var.environment
-  }
-}
-
-
-
-# Create network ACL for subnets
-resource "aws_network_acl" "network_acl" {
-  vpc_id = aws_vpc.vpc.id
-
-  subnet_ids = concat(
-    aws_subnet.public.*.id,
-    aws_subnet.private.*.id
-  )
-
-  egress {
-    rule_no = 100
-    protocol    = "all"
-    action      = "allow"
-    cidr_block  = "0.0.0.0/0"
-    from_port   = 0
-    to_port     = 0
-  }
-
-  ingress {
-    rule_no = 100
-    protocol    = "tcp"
-    action      = "allow"
-    cidr_block  = "0.0.0.0/0"
-    from_port   = 80
-    to_port     = 80
-  }
-
-  ingress {
-    rule_no = 110
-    protocol    = "tcp"
-    action      = "allow"
-    cidr_block  = "0.0.0.0/0"
-    from_port   = 443
-    to_port     = 443
-  }
-
-  ingress {
-    rule_no = 115
-    protocol    = "tcp"
-    action      = "allow"
-    cidr_block  = "0.0.0.0/0"
-    from_port   = 22
-    to_port     = 22
-  }
-
-  ingress {
-    rule_no = 120
-    protocol    = "tcp"
-    action      = "allow"
-    cidr_block  = "0.0.0.0/0"
-    from_port   = 0
-    to_port     = 65535
-  }
-
-  tags = {
-    Name        = var.nacl_name
-    Environment = var.environment
   }
 }

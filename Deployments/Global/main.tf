@@ -19,5 +19,5 @@ module "s3" {
   environment = "prod"
   enable_encryption = true
   enable_versioning = false
-  account_id = "027427181034"
+  account_id = "*"
 }
