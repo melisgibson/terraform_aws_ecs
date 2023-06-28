@@ -1,14 +1,14 @@
 # --- networking/module/main.tf ---
 # Create VPC
 resource "aws_vpc" "vpc" {
-  cidr_block = var.vpc_cidr
+  cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
   enable_dns_support   = true
   instance_tenancy     = "default"
 
   tags = {
-    Name = var.vpc_name
-    Terraform = "true"
+    Name        = var.vpc_name
+    Terraform   = "true"
     Environment = var.environment
   }
 }
@@ -18,7 +18,7 @@ resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = var.gw_name
+    Name        = var.gw_name
     Environment = var.environment
   }
   lifecycle {
@@ -30,14 +30,14 @@ resource "aws_internet_gateway" "gw" {
 resource "aws_subnet" "public" {
   count = length(var.public_subnet_cidr_blocks)
 
-  cidr_block = var.public_subnet_cidr_blocks[count.index]
-  vpc_id     = aws_vpc.vpc.id
-  map_public_ip_on_launch = true
+  cidr_block                          = var.public_subnet_cidr_blocks[count.index]
+  vpc_id                              = aws_vpc.vpc.id
+  map_public_ip_on_launch             = true
   private_dns_hostname_type_on_launch = "ip-name"
-  availability_zone = element(var.availability_zones, count.index)
+  availability_zone                   = element(var.availability_zones, count.index)
 
   tags = {
-    Name = "${var.public_subnet_name_prefix}-${count.index + 1}"
+    Name        = "${var.public_subnet_name_prefix}-${count.index + 1}"
     Environment = var.environment
   }
 }
@@ -46,13 +46,13 @@ resource "aws_subnet" "public" {
 resource "aws_subnet" "private" {
   count = length(var.private_subnet_cidr_blocks)
 
-  cidr_block = var.private_subnet_cidr_blocks[count.index]
+  cidr_block                          = var.private_subnet_cidr_blocks[count.index]
   private_dns_hostname_type_on_launch = "ip-name"
-  vpc_id     = aws_vpc.vpc.id
-  availability_zone = element(var.availability_zones, count.index)
+  vpc_id                              = aws_vpc.vpc.id
+  availability_zone                   = element(var.availability_zones, count.index)
 
   tags = {
-    Name = "${var.private_subnet_name_prefix}-${count.index + 1}"
+    Name        = "${var.private_subnet_name_prefix}-${count.index + 1}"
     Environment = var.environment
   }
 }
@@ -68,8 +68,8 @@ resource "aws_eip" "nat_eip" {
 
 # Create NAT Gateway
 resource "aws_nat_gateway" "nat_gateway" {
-  allocation_id  = aws_eip.nat_eip.id
-  subnet_id      = aws_subnet.public[0].id
+  allocation_id = aws_eip.nat_eip.id
+  subnet_id     = aws_subnet.public[0].id
 
   tags = {
     Name = var.nat_gateway_name
@@ -87,17 +87,17 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = var.public_rt_name
+    Name        = var.public_rt_name
     Environment = var.environment
   }
 }
 
 # Create route table for private subnets
 resource "aws_route_table" "private" {
-  count = length(aws_subnet.private)
+  count  = length(aws_subnet.private)
   vpc_id = aws_vpc.vpc.id
   tags = {
-    Name = "${var.private_rt_name}-${count.index + 1}"
+    Name        = "${var.private_rt_name}-${count.index + 1}"
     Environment = var.environment
   }
 }
@@ -118,7 +118,7 @@ resource "aws_route_table_association" "private" {
 
 # Add nat gateway routes to private route tables
 resource "aws_route" "nat_gateway_route" {
-  count = length(aws_subnet.private)
+  count                  = length(aws_subnet.private)
   route_table_id         = aws_route_table.private[count.index].id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.nat_gateway.id
@@ -126,10 +126,10 @@ resource "aws_route" "nat_gateway_route" {
 
 # Create security group for nodes
 resource "aws_security_group" "sg" {
-  name        = var.sg_name
-  vpc_id      = aws_vpc.vpc.id
+  name   = var.sg_name
+  vpc_id = aws_vpc.vpc.id
   tags = {
-    Name = var.sg_name
+    Name        = var.sg_name
     Environment = var.environment
   }
 
@@ -155,16 +155,16 @@ resource "aws_security_group" "sg" {
   }
 
   ingress {
-    from_port       = 0
-    to_port         = 65535
-    protocol        = "tcp"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
-  
+
   ingress {
-    from_port    = 22
-    to_port      = 22
-    protocol     = "tcp"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }

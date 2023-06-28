@@ -36,48 +36,48 @@ variable "desired_count" {
 }
 
 variable "deployment_max" {
-  
+
 }
 
 variable "deployment_min" {
-  
+
 }
 variable "enable_deployment_circuit_breaker" {
-  type    = bool
+  type = bool
 
 }
 
 variable "enable_rollback" {
-  type    = bool
+  type = bool
 
 }
 
 variable "placement_constraint_type" {
-  type    = string
+  type = string
 
 }
 
 variable "placement_constraint_expression" {
-  type    = string
+  type = string
 }
 
 variable "enable_ecs_managed_tags" {
-  type    = bool
+  type = bool
 
 }
 
 variable "propagate_tags" {
-  type    = string
+  type = string
 
 }
 
 variable "enable_execute_command" {
-  type    = bool
+  type = bool
 
 }
 
 variable "health_check_grace_period" {
-  type    = number
+  type = number
 
 }
 
@@ -86,7 +86,7 @@ variable "iam_role" {
 }
 
 variable "network_mode" {
-  
+
 }
 
 variable "target_group_arn" {

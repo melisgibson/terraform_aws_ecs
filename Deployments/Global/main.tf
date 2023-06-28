@@ -14,10 +14,10 @@ terraform {
 }
 
 module "s3" {
-  source = "../../Modules/s3"
-  bucket_name = "mgibson-us-east-2-elb-access-logs"
-  environment = "prod"
+  source            = "../../Modules/s3"
+  bucket_name       = "mgibson-us-east-2-elb-access-logs"
+  environment       = "prod"
   enable_encryption = true
   enable_versioning = false
-  account_id = "*"
+  account_id        = "*"
 }

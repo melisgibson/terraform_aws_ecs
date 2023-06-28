@@ -22,7 +22,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encryption" {
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm     = "AES256"
+      sse_algorithm = "AES256"
     }
   }
 }
@@ -45,14 +45,14 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect   = "Allow"
+        Effect = "Allow"
         Principal = {
-            AWS = "arn:aws:iam::${var.account_id}:root"
+          AWS = "arn:aws:iam::${var.account_id}:root"
         }
         Action = [
-			"s3:PutObject"
+          "s3:PutObject"
         ]
-        
+
         Resource = [
           "${aws_s3_bucket.bucket.arn}/AWSLogs/${var.account_id}",
           "${aws_s3_bucket.bucket.arn}/*",

@@ -21,5 +21,5 @@ variable "is_public" {
 }
 
 variable "account_id" {
-  
+
 }

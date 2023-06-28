@@ -33,7 +33,7 @@ module "networking" {
 
 module "ec2" {
   source                  = "../../Modules/ec2"
-  ami_owner               = "591542846629" 
+  ami_owner               = "591542846629"
   ami_name                = "amzn2-ami-ecs-hvm-2.0.20230530-x86_64-ebs"
   launch_template_name    = "staging-ecs-us-east-2-lt"
   environment             = "staging"
@@ -52,27 +52,27 @@ module "ec2" {
 }
 
 module "ecs" {
-  source         = "../../Modules/ecs"
-  environment    = "staging"
-  cluster_name   = "staging-us-east-2-ecs"
+  source       = "../../Modules/ecs"
+  environment  = "staging"
+  cluster_name = "staging-us-east-2-ecs"
 }
 
 module "elb" {
-  source              = "../../Modules/elb"
-  environment         = "staging"
-  alb_name            = "staging-use2-alb"
-  public_subnets      = module.networking.public_subnet_ids
-  alb_sg              = module.networking.sg_id
-  listener_port       = 80
-  vpc_id                            = module.networking.vpc_id
-  tg_name                           = "staging-use2-tg"
-  tg_port                           = 80
-  target_type                       = "instance"
-  healthy_threshold                 = 2
-  unhealthy_threshold               = 2
-  health_check_interval             = 30
-  health_check_path                 = "/health"
-  health_check_timeout              = 5
+  source                = "../../Modules/elb"
+  environment           = "staging"
+  alb_name              = "staging-use2-alb"
+  public_subnets        = module.networking.public_subnet_ids
+  alb_sg                = module.networking.sg_id
+  listener_port         = 80
+  vpc_id                = module.networking.vpc_id
+  tg_name               = "staging-use2-tg"
+  tg_port               = 80
+  target_type           = "instance"
+  healthy_threshold     = 2
+  unhealthy_threshold   = 2
+  health_check_interval = 30
+  health_check_path     = "/health"
+  health_check_timeout  = 5
 }
 
 module "ecs-service" {
@@ -86,7 +86,7 @@ module "ecs-service" {
   deployment_min                    = 100
   container_name                    = "hello-world-container"
   container_port                    = 4000
-  target_group_arn = module.elb.target_group_arn
+  target_group_arn                  = module.elb.target_group_arn
   enable_deployment_circuit_breaker = false
   enable_rollback                   = false
   placement_constraint_type         = "memberOf"

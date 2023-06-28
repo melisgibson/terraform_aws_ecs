@@ -17,8 +17,8 @@ variable "environment" {
 
 
 variable "listener_port" {
-type = number
-description = "The port to listen on for the application load balancer listener."
+  type        = number
+  description = "The port to listen on for the application load balancer listener."
 }
 
 variable "tg_name" {

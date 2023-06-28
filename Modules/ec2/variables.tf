@@ -25,7 +25,7 @@ variable "instance_type" {
 }
 
 variable "iam_instance_profile" {
-  type       = string
+  type        = string
   description = "Instance profile role."
 }
 variable "key_name" {
